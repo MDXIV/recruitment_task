@@ -37,15 +37,15 @@ if __name__ == "__main__":
 
     client = OpenAI(api_key = os.environ['OPENAI_API_KEY'])
 
-    prompt = f"""Do podanego tekstu napisz używając kodu HTML stronę www, strona nie może mieć kodu CSS oraz JavaScript. Umieść tag <img> z atrybutem  src=\"image_placeholder.jpg\" w najbardziej odpowiednich miejscach, 
-    dodaj do nich atrybut alt z dokładnym tekstem który możemy użyć do wygenerowania grafiki. Zwrócony kod powinien zawierać wyłącznie zawartość do wstawienia pomiędzy tagami <body> i </body> bez znaczników <body>. 
-    Opowiedz powinna zawierać tylko czysty kod. Oto tekst: {text}"""
-    conversation_history, response = get_chat_response(client, prompt, conversation_history, 52, 0.5)
+    prompt = f"""Do podanego tekstu napisz używając kodu HTML stronę www, strona nie może mieć kodu CSS oraz JavaScript. Umieść tag <img> z atrybutem  src=\"image_placeholder.jpg\" 
+    w najbardziej odpowiednich miejscach, dodaj do nich atrybut alt z dokładnym i rozwiniętym opisem ilustracji który użyjemy do wygenerowania grafiki wraz z znacznikiem <figcaption> z 
+    podstawowym opisem grafiki. Zwrócony kod powinien zawierać wyłącznie zawartość do wstawienia pomiędzy tagami <body> i </body> bez znaczników <body>. Opowiedz powinna zawierać tylko czysty kod. Oto tekst: {text}"""
+    conversation_history, response = get_chat_response(client, prompt, conversation_history, 52, 0.8)
     write_to_file("artykul.html", response.choices[0].message.content[8:-4])
 
     prompt = """Napisz najbardziej odpowiedni szablon dla wcześniej napisanego kodu. Możesz korzystać z CSS, stylów, JavaScript, Bootstrap, FontAwesome oraz innych zewnętrznych bibliotek. 
      Strona powinna wyglądać kreatywnie i mieć lekko przyciemniony kontrast. Powinna dobrze wyświetlać się na telefonach oraz komputerach stacjonarnych.
-    Skrypty umieść w sekcji <head>. Sekcja <body> nie może zawierać żadnej treści, powinna być całkowicie pusta. Opowiedz powinna zawierać tylko sam kod bez żadnych komentarzy."""
+    Marginesy powinny być odpowiednio szerokie by tekst z obrazkami wypełniły stronę. Skrypty umieść w sekcji <head>. Sekcja <body> nie może zawierać żadnej treści, powinna być całkowicie pusta. Opowiedz powinna zawierać tylko sam kod bez żadnych komentarzy."""
     conversation_history.append({"role": "user", "content": prompt})
     conversation_history, response = get_chat_response(client, prompt, conversation_history, 52, 0.9)
     write_to_file("szablon.html", response.choices[0].message.content[8:-4])
